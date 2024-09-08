@@ -1,8 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import Prueba from "./components/Prueba";
 import AppLayouts from "./layouts/AppLayouts";
-import AuthLayouts from "./layouts/AuthLayouts";
 import DashboardView from "./views/DashboardView";
+
+const AuthLayouts  = lazy(()=> import("./layouts/AuthLayouts"));
 
 const router = createBrowserRouter([
   {
@@ -17,7 +19,7 @@ const router = createBrowserRouter([
   },
   {
     path:'/auth',
-    element:<AuthLayouts/>,
+    element:<Suspense><AuthLayouts/></Suspense>,
     children: [
       {
         path:'prueba',
