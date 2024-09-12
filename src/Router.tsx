@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import Prueba from "./components/Prueba";
 import AppLayouts from "./layouts/AppLayouts";
 import DashboardView from "./views/DashboardView";
+import CreateProjectView from "./views/projects/CreateProjectView";
 
 const AuthLayouts  = lazy(()=> import("./layouts/AuthLayouts"));
 
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
       {
         index:true,
         element:<DashboardView/>
+      },
+      {
+        path:'project/create',
+        element:<CreateProjectView/>
       }
     ]
   },
