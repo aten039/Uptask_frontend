@@ -1,10 +1,11 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Link } from "react-router-dom"
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
-import { getProjects } from "../services/projectApi"
+import { deleteProject, getProjects } from "../services/projectApi"
 import ErrorMessage from "../components/ErrorMessage";
+import { toast } from "react-toastify"
 
 export default function DashboardView() {
 
@@ -12,8 +13,15 @@ export default function DashboardView() {
     queryKey: ['projects'],
     queryFn : getProjects
   });
-
-  console.log(data)
+  const queryClient = useQueryClient()
+  const {mutate} = useMutation({
+    mutationFn: deleteProject,
+    onSuccess: (data)=>{ 
+      toast.success(data) 
+      queryClient.invalidateQueries({queryKey:['projects']})
+    },
+    onError:(error)=>{ toast.error(error.message)}
+  })
 
   return (
     <>
@@ -69,7 +77,7 @@ export default function DashboardView() {
                                         </Link>
                                     </Menu.Item>
                                     <Menu.Item>
-                                        <Link to={``}
+                                        <Link to={`project/${project._id}/edit`}
                                             className='block px-3 py-1 text-sm leading-6 text-gray-900'>
                                         Editar Proyecto
                                         </Link>
@@ -78,7 +86,9 @@ export default function DashboardView() {
                                         <button 
                                             type='button' 
                                             className='block px-3 py-1 text-sm leading-6 text-red-500'
-                                            onClick={() => {} }
+                                            onClick={() =>{
+                                              const auth = confirm(`Desea Eliminar: ${project.projectName}`)
+                                              if(auth) return mutate(project._id)} }
                                         >
                                             Eliminar Proyecto
                                         </button>
