@@ -5,6 +5,7 @@ import AppLayouts from "./layouts/AppLayouts";
 import DashboardView from "./views/DashboardView";
 import CreateProjectView from "./views/projects/CreateProjectView";
 import EditProject from "./views/projects/EditProject";
+import DetailsProjectView from "./views/projects/DetailsProjectView";
 
 const AuthLayouts  = lazy(()=> import("./layouts/AuthLayouts"));
 
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path:'project/create',
         element:<CreateProjectView/>
+      },
+      {
+        path:'project/:projectId',
+        element:<DetailsProjectView/>
       },
       {
         path:'project/:projectId/edit',
