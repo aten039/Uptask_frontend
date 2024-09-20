@@ -1,5 +1,5 @@
 
-import { Menu, Transition } from '@headlessui/react'
+import { Menu, MenuButton, MenuItem, Transition } from '@headlessui/react'
 import { Task } from '../../types'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react/jsx-runtime'
@@ -42,29 +42,33 @@ export default function TaskCard({task}: Props) {
 
       <div className="flex shrink-0  gap-x-6">
         <Menu as="div" className="relative flex-none">
-            <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
+            <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
                 <span className="sr-only">opciones</span>
                 <EllipsisVerticalIcon className="h-9 w-9" aria-hidden="true" />
-            </Menu.Button>
+            </MenuButton>
             <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95"
                 enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75"
                 leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
                 <Menu.Items
                     className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                    <Menu.Item>
-                        <button type='button' className='block px-3 py-1 text-sm leading-6 text-gray-900'>
+                    <MenuItem>
+                        <button 
+                        type='button' 
+                        className='block px-3 py-1 text-sm leading-6 text-gray-900'
+                        onClick={()=>{ navigate(location.pathname + `?viewTask=${task._id}`) }}
+                        >
                             Ver Tarea
                         </button>
-                    </Menu.Item>
-                    <Menu.Item>
+                    </MenuItem>
+                    <MenuItem>
                         <button type='button' className='block px-3 py-1 text-sm leading-6 text-gray-900'
                             onClick={()=> navigate(location.pathname +`?taskId=${task._id}`)}
                         >
                             Editar Tarea
                         </button>
-                    </Menu.Item>
+                    </MenuItem>
 
-                    <Menu.Item>
+                    <MenuItem>
                         <button 
                             type='button' 
                             className='block px-3 py-1 text-sm leading-6 text-red-500'
@@ -72,7 +76,7 @@ export default function TaskCard({task}: Props) {
                         >
                             Eliminar Tarea
                         </button>
-                    </Menu.Item>
+                    </MenuItem>
                 </Menu.Items>
             </Transition>
         </Menu>

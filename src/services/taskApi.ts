@@ -5,7 +5,8 @@ import api from "../lib/axios";
 type TaskApi = {
     taskFormData: TaskFormData,
     projectId: Project['_id'],
-    taskId:Task['_id']
+    taskId:Task['_id'],
+    status: Task['status']
 }
 
 export async function createTask({taskFormData , projectId}: Pick<TaskApi, 'taskFormData' | 'projectId'>) {
@@ -62,6 +63,23 @@ export async function deleteTask({projectId, taskId}:Pick<TaskApi, 'projectId' |
         const url = `/projects/${projectId}/task/${taskId}`
 
         const {data} = await api.delete<string>(url)
+        
+        return data
+    } catch (error) {
+        if(isAxiosError(error) && error.response){
+            console.log(error)
+            throw new Error(error.response?.data.errors.msg);
+        }
+        throw new Error('ha ocurrido un error');
+    }
+}
+
+export async function updateStatus({projectId,taskId, status}: Pick<TaskApi, 'projectId'| 'taskId' | 'status'>) {
+
+    const url = `/projects/${projectId}/task/${taskId}/status`
+
+    try {
+        const {data} = await api.post<string>(url, {status})
         
         return data
     } catch (error) {
