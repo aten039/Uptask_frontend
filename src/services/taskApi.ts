@@ -67,7 +67,6 @@ export async function deleteTask({projectId, taskId}:Pick<TaskApi, 'projectId' |
         return data
     } catch (error) {
         if(isAxiosError(error) && error.response){
-            console.log(error)
             throw new Error(error.response?.data.errors.msg);
         }
         throw new Error('ha ocurrido un error');
@@ -84,7 +83,6 @@ export async function updateStatus({projectId,taskId, status}: Pick<TaskApi, 'pr
         return data
     } catch (error) {
         if(isAxiosError(error) && error.response){
-            console.log(error)
             throw new Error(error.response?.data.errors.msg);
         }
         throw new Error('ha ocurrido un error');
