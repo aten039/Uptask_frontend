@@ -1,19 +1,27 @@
-import {Outlet} from 'react-router-dom';
+import {Navigate, Outlet} from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import Logo from '../components/Logo';
 import MenuHeadlesUi from '../components/MenuHeadlesUi';
+import { useAuth } from '../hooks/useAuth';
 
 export default function AppLayouts() {
 
-    return (
+  const {data , isError, isLoading} = useAuth()
+
+    if(isLoading) return 'Cargando...'
+    if(isError) return <Navigate to={'/auth/login'}/>
+
+    if(data) return (
     <>
       <header className=' bg-gray-800 py-5'>
         <div className='max-w-screen-2xl mx-auto flex flex-col lg:px-10 lg:flex-row justify-between items-center 2xl:px-0'>
           <div className=' w-64'>
             <Logo/>
           </div>
-          <MenuHeadlesUi/>
+          <MenuHeadlesUi
+            name={data.name}
+          />
         </div>
 
       </header>
