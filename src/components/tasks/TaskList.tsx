@@ -3,7 +3,8 @@ import { Task } from "../../types"
 import TaskCard from "./TaskCard"
 
 type TaskListProp={
-    tasks : Task[]
+    tasks : Task[],
+    canEdit: boolean
 }
 
 type GroupTask = {
@@ -27,7 +28,7 @@ const statusStyle : {[key:string] : string}= {
     completed: 'border-t-emerald-500'
 }
 
-export default function TaskList({tasks}: TaskListProp) {
+export default function TaskList({tasks, canEdit}: TaskListProp) {
   
     const groupedTasks = tasks.reduce((acc, task) => {
         let currentGroup = acc[task.status] ? [...acc[task.status]] : [];
@@ -49,7 +50,7 @@ export default function TaskList({tasks}: TaskListProp) {
                         {tasks.length === 0 ? (
                             <li className="text-gray-500 text-center pt-3">No Hay tareas</li>
                         ) : (
-                            tasks.map(task => <TaskCard key={task._id} task={task} />)
+                            tasks.map(task => <TaskCard key={task._id} task={task} canEdit={canEdit}/>)
                         )}
                     </ul>
                 </div>

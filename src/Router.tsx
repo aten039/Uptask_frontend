@@ -11,6 +11,7 @@ import ConfirmAccountView from "./views/auth/ConfirmAccountView";
 import RequestNewCodeView from "./views/auth/RequestNewCodeView";
 import ForgotPassword from "./views/auth/ForgotPassword";
 import NewPasswordView from "./views/auth/NewPasswordView";
+import TeamProjectView from "./views/projects/TeamProjectView";
 
 const AuthLayouts  = lazy(()=> import("./layouts/AuthLayouts"));
 
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path:'project/:projectId/edit',
         element:<EditProject/>
+      },
+      {
+        path:'project/:projectId/team',
+        element:<TeamProjectView/>
       }
     ]
   },

@@ -6,9 +6,12 @@ import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { deleteProject, getProjects } from "../services/projectApi"
 import ErrorMessage from "../components/ErrorMessage";
 import { toast } from "react-toastify"
+import { useAuth } from "../hooks/useAuth"
+import { isManager } from "../utils/policies"
 
 export default function DashboardView() {
 
+  const {data:user , isLoading:authLoading} = useAuth()
   const {data, isError, isLoading} = useQuery({
     queryKey: ['projects'],
     queryFn : getProjects
@@ -32,20 +35,29 @@ export default function DashboardView() {
         <Link className="bg-purple-400 hover:bg-purple-500 px-10 py-3 text-white text-xl font-bold cursor-pointer transition-colors " to={'/project/create'}>Nuevo Proyecto</Link>
       </nav>
      
-     {isLoading&& (
+     {isLoading || authLoading ? (
       <p>Cargando...</p>
-     )}
+     ): ''}
      {isError&&(
       <ErrorMessage>error al conectar, intente nuevamente</ErrorMessage>
      )}
     {data&&(
       <div>
-        {data.length ? (
+        {data.length && user ? (
           <ul role="list" className="divide-y divide-gray-100 border border-gray-100 mt-10 bg-white shadow-lg">
           {data.map((project) => (
             <li key={project._id} className="flex justify-between gap-x-6 px-5 py-10">
                 <div className="flex min-w-0 gap-x-4">
                     <div className="min-w-0 flex-auto space-y-2">
+                      {isManager(project.manager, user._id) ? (
+                        <p className="text-sm underline font-bold text-purple-500 underline-offset-4 mb-2">
+                            Manager
+                        </p>
+                      ):(
+                        <p className="text-sm underline font-bold text-fuchsia-500 underline-offset-4 mb-2">
+                            Colaborador
+                        </p>
+                      )}
                         <Link to={`/project/${project._id}`}
                             className="text-gray-600 cursor-pointer hover:underline text-3xl font-bold"
                         >{project.projectName}</Link>
@@ -55,6 +67,7 @@ export default function DashboardView() {
                         <p className="text-sm text-gray-400">
                             {project.description}
                         </p>
+                        
                     </div>
                 </div>
                 <div className="flex shrink-0 items-center gap-x-6">
@@ -76,23 +89,28 @@ export default function DashboardView() {
                                         Ver Proyecto
                                         </Link>
                                     </Menu.Item>
-                                    <Menu.Item>
-                                        <Link to={`project/${project._id}/edit`}
-                                            className='block px-3 py-1 text-sm leading-6 text-gray-900'>
-                                        Editar Proyecto
-                                        </Link>
-                                    </Menu.Item>
-                                    <Menu.Item>
-                                        <button 
-                                            type='button' 
-                                            className='block px-3 py-1 text-sm leading-6 text-red-500'
-                                            onClick={() =>{
-                                              const auth = confirm(`Desea Eliminar: ${project.projectName}`)
-                                              if(auth) return mutate(project._id)} }
-                                        >
-                                            Eliminar Proyecto
-                                        </button>
-                                    </Menu.Item>
+                                    {isManager(project.manager, user._id) && (
+                                      <>
+                                        <Menu.Item>
+                                          <Link to={`project/${project._id}/edit`}
+                                              className='block px-3 py-1 text-sm leading-6 text-gray-900'>
+                                          Editar Proyecto
+                                          </Link>
+                                        </Menu.Item>
+                                        <Menu.Item>
+                                          <button 
+                                              type='button' 
+                                              className='block px-3 py-1 text-sm leading-6 text-red-500'
+                                              onClick={() =>{
+                                                const auth = confirm(`Desea Eliminar: ${project.projectName}`)
+                                                if(auth) return mutate(project._id)} }
+                                          >
+                                              Eliminar Proyecto
+                                          </button>
+                                        </Menu.Item>
+                                      </>
+                                    )}
+                                    
                             </Menu.Items>
                         </Transition>
                     </Menu>
