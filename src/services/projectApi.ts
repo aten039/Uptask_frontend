@@ -1,5 +1,4 @@
-
-import { dashboardProjectSchema, Project, ProjectFormData, projectSchema } from "../types";
+import { dashboardProjectSchema, Project, ProjectFormData,  } from "../types";
 import api from "../lib/axios";
 import { isAxiosError } from "axios";
 
@@ -37,13 +36,13 @@ export async function getProjects() {
 export async function getProjectById(id:Project['_id']) {
     try {
         const {data} = await api.get(`/projects/${id}`);
-        
-        const result = projectSchema.safeParse(data)
-
-        if(!result.success){
-            throw new Error('ha ocurrido un error');
-        }
-        return result.data
+        // console.log(data)
+        // const result = projectSchema.safeParse(data)
+        // console.log(result)
+        // if(!result.success){
+        //     throw new Error('ha ocurrido un error');
+        // }
+        return data
     } catch (error) {
 
         throw new Error('ha ocurrido un error');

@@ -28,6 +28,18 @@ export const userSchema = authSchema.pick({
 
 export type User = z.infer<typeof userSchema>
 
+//notes
+
+const noteSchema = z.object({
+    _id:z.string(),
+    content:z.string(),
+    createBy:userSchema,
+    task:z.string()
+})
+
+export type Note = z.infer<typeof noteSchema>
+export type NoteFormData = Pick<Note, 'content'>
+
 // Task
 
 export const taskStatusSchema = z.enum(["pending" , "onHold" , "inProgress" , "underReview" , "completed"])
@@ -38,6 +50,14 @@ export const taskSchema = z.object({
     description:z.string(),
     project:z.string(),
     status: taskStatusSchema,
+    completedBy: z.array(z.object({
+        _id:z.string(),
+        user:userSchema,
+        status:taskStatusSchema
+    })) ,
+    notes:z.array(noteSchema.extend({
+        createBy: userSchema
+    })),
     createdAt: z.string(),
     updatedAt: z.string()
 })
@@ -52,7 +72,7 @@ export const projectSchema = z.object({
     projectName: z.string(),
     clientName: z.string(),
     description: z.string(),
-    tasks: z.array(taskSchema),
+    tasks:z.array(taskSchema),
     manager:z.string(userSchema.pick({_id:true}))
 });
 
