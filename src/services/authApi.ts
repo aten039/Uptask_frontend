@@ -1,5 +1,5 @@
 import { isAxiosError } from "axios";
-import { ConfirmToken, ForgotPasswordForm, NewPasswordForm, RequestConfirmationCodeForm, UserLoginForm, UserRegistrationForm, userSchema } from "../types";
+import { ConfirmToken, ForgotPasswordForm, NewPasswordForm, PasswordForm, RequestConfirmationCodeForm, UserLoginForm, UserRegistrationForm, userSchema } from "../types";
 import api from "../lib/axios";
 
 
@@ -112,6 +112,20 @@ export async function getUser() {
         if(result.success){
             return data
         }
+        
+    } catch (error) {
+        if(isAxiosError(error) && error.response){
+            throw new Error(error.response?.data?.errors?.msg ?? 'ha ocurrido un error');
+        }
+        throw new Error('ha ocurrido un error');
+    }
+}
+
+export async function checkPassword(formData:PasswordForm) {
+    try {
+        const {data} = await api.post('/auth/check-password', formData)
+    
+        return data
         
     } catch (error) {
         if(isAxiosError(error) && error.response){

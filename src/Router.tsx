@@ -12,6 +12,9 @@ import RequestNewCodeView from "./views/auth/RequestNewCodeView";
 import ForgotPassword from "./views/auth/ForgotPassword";
 import NewPasswordView from "./views/auth/NewPasswordView";
 import TeamProjectView from "./views/projects/TeamProjectView";
+import ProfileView from "./views/profile/ProfileView";
+import ChangePasswordView from "./views/profile/ChangePasswordView";
+import ProfileLayout from "./layouts/ProfileLayout";
 
 const AuthLayouts  = lazy(()=> import("./layouts/AuthLayouts"));
 
@@ -39,7 +42,22 @@ const router = createBrowserRouter([
       {
         path:'project/:projectId/team',
         element:<TeamProjectView/>
+      },
+      {
+        path:'profile',
+        element:<ProfileLayout/>,
+        children:[
+          {
+            index:true,
+            element:<ProfileView/>
+          },
+          {
+            path:'password',
+            element:<ChangePasswordView/>
+          }
+        ]
       }
+      
     ]
   },
   {
