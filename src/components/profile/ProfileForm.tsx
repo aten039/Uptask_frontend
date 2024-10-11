@@ -26,7 +26,7 @@ export default function ProfileForm({ data }:ProfileFormProp) {
             })
         }
     })
-    const handleEditProfile = (formData:UserProfileForm) => { mutate({formData})}
+    const handleEditProfile = (formData:UserProfileForm) => { mutate({userProfile:formData})}
 
     return (
         <>

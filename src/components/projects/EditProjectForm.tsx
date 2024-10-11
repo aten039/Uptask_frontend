@@ -1,13 +1,13 @@
 import { SubmitHandler, useForm } from "react-hook-form"
 import ProjectForm from "./ProjectForm"
-import { Project, ProjectFormData } from "../../types"
+import { ProjectFormData } from "../../types"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { updateProject } from "../../services/projectApi"
 import { toast } from "react-toastify"
 
 type Props = {
-    project: Project
+    project: ProjectFormData
 }
 
 export default function EditProjectForm({project}: Props) {
@@ -38,11 +38,11 @@ export default function EditProjectForm({project}: Props) {
 
     const handleForm: SubmitHandler<ProjectFormData
     > = (formData: ProjectFormData)=>{
-        const project = {
-            ...formData,
-            _id: projectId
-        }
-        mutate(project)
+          
+      mutate({
+        project:formData,
+        id:projectId
+      })
     }
 
     return (
