@@ -15,6 +15,7 @@ import TeamProjectView from "./views/projects/TeamProjectView";
 import ProfileView from "./views/profile/ProfileView";
 import ChangePasswordView from "./views/profile/ChangePasswordView";
 import ProfileLayout from "./layouts/ProfileLayout";
+import NotFound from "./404/NotFound";
 
 const AuthLayouts  = lazy(()=> import("./layouts/AuthLayouts"));
 
@@ -87,6 +88,16 @@ const router = createBrowserRouter([
       {
         path:'new-password',
         element:<NewPasswordView/>
+      }
+    ]
+  },
+  {
+    path:'*',
+    element:<Suspense><AuthLayouts/></Suspense>,
+    children: [
+      {
+        path:'*',
+        element:<NotFound/>
       }
     ]
   }

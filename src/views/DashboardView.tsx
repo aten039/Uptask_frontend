@@ -15,7 +15,9 @@ export default function DashboardView() {
   const {data:user , isLoading:authLoading} = useAuth()
   const {data, isError, isLoading} = useQuery({
     queryKey: ['projects'],
-    queryFn : getProjects
+    queryFn : getProjects,
+    retry:1,
+    
   });
  
 
