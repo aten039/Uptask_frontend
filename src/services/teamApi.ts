@@ -12,7 +12,7 @@ type TeamApi = {
 export async function findUserByEmail({projectId , formData}:Pick<TeamApi, 'formData'|'projectId'>) {
     
     try {
-        const url = `http://localhost:4000/api/projects/${projectId}/team/find`
+        const url = `/projects/${projectId}/team/find`
 
         const {data} = await api.post(url, formData)
 
